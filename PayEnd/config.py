@@ -2,6 +2,9 @@ import os
 
 # Because GenZ loves video games!
 PREDEFINED_QUERY = "game"
+PAGINATION_LIMIT = 10
+# add every entry as fetched
+BULK_SAVE = False
 
 # interval for published_after
 # 1 week (in seconds)
