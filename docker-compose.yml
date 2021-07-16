@@ -1,0 +1,23 @@
+version: "2.4"
+
+services:
+  mongo:
+    image: mongo:4.0-xenial
+    volumes:
+      - data:/data/db
+  flask:
+    build: ./PayEnd
+    env_file: ./PayEnd/.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+  react:
+    build: ./FamEnd
+    ports:
+      - "5000:5000"
+    depends_on:
+      - flask
+
+volumes:
+  data:
