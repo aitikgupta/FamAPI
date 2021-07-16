@@ -1,6 +1,7 @@
+from config import MONGODB_URI
 from pymongo import MongoClient, DESCENDING
 
-client = MongoClient("mongo", 27017)
+client = MongoClient(MONGODB_URI)
 database = client.fambase
 
 fam_collection = database.get_collection("fam_collection")
