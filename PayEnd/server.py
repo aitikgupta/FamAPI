@@ -9,6 +9,7 @@ from config import (
     HOST_URL,
     HOST_PORT,
     SLEEP_TIME,
+    BULK_SAVE,
     YOUTUBE_SERVICE_NAME,
     YOUTUBE_API_VERSION,
 )
@@ -31,7 +32,11 @@ def activate_job():
         while True:
             print("[FamServer] Fetching new videos!")
             global page_token
-            results, next_token = poller.fetch_latest_videos(page_token)
+            results, next_token = poller.fetch_latest_videos(
+                page_token, save_each=not BULK_SAVE
+            )
+            if BULK_SAVE:
+                poller.save_videos(results)
 
             # next_token is None when API limit exceeds
             page_token = next_token if next_token else page_token

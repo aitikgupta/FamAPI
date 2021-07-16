@@ -6,6 +6,7 @@ from googleapiclient.errors import HttpError
 from config import CHUNK_TIME, PREDEFINED_QUERY, LOCAL_API_LIMIT
 from utils import get_API_key, generate_new_API_key
 from FamBase.schema import FamVideo
+from FamBase.controller import add_video, add_videos
 
 
 class YoutubePoller:
@@ -34,7 +35,7 @@ class YoutubePoller:
         self.api_key_hit = 0
         print("[FamService] Updating API key..", self.api_key)
 
-    def fetch_latest_videos(self, page_token=None):
+    def fetch_latest_videos(self, page_token=None, save_each=True):
         try:
             response = (
                 self._youtube_object.search()
@@ -77,16 +78,34 @@ class YoutubePoller:
                     "%Y-%m-%dT%H:%M:%SZ",
                 ).strftime("%Y-%m-%d %H:%M:%S")
 
-                results.append(
-                    FamVideo(
-                        item["id"]["videoId"],
-                        item["snippet"]["title"],
-                        item["snippet"]["description"],
-                        formatted_date,
-                        item["snippet"]["thumbnails"]["default"]["url"],
-                        item["snippet"]["thumbnails"]["high"]["url"],
-                    )
+                fam_video = FamVideo(
+                    item["id"]["videoId"],
+                    item["snippet"]["title"],
+                    item["snippet"]["description"],
+                    formatted_date,
+                    item["snippet"]["thumbnails"]["default"]["url"],
+                    item["snippet"]["thumbnails"]["high"]["url"],
                 )
+
+                if save_each:
+                    self.save_video(fam_video)
+                else:
+                    results.append(fam_video)
 
         next_page_token = response.get("nextPageToken", None)
         return results, next_page_token
+
+    @staticmethod
+    def save_video(fam_video):
+        if fam_video:
+            add_video(fam_video.__dict__)
+        else:
+            print("[FamService] Warning: empty entry")
+
+    @staticmethod
+    def save_videos(fam_videos):
+        fam_list = [vid.__dict__ for vid in fam_videos]
+        if fam_list:
+            add_videos(fam_list)
+        else:
+            print("[FamService] Warning: list empty")
