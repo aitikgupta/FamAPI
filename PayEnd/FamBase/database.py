@@ -7,7 +7,6 @@ database = client.fambase
 fam_collection = database.get_collection("fam_collection")
 
 # index via description
-fam_collection.create_index([
-    ("title", DESCENDING),
-    ("description", DESCENDING)
-])
+fam_collection.create_index(
+    [("title", DESCENDING), ("description", DESCENDING)]
+)
