@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+import Header from './Components/Header';
 import Button from './Components/Button';
 import Search from './Components/Search';
 import VideoCard from './Components/VideoCard';
@@ -71,7 +72,7 @@ function App() {
 
   return (
     <div className="App">
-        <header className="App-header"/>
+        <Header />
 
         <Search query={query} setQuery={setQuery} getVideos={getVideos} />
 
