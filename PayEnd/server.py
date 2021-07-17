@@ -2,7 +2,7 @@ import requests
 import threading
 import time
 
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
 from config import (
@@ -16,6 +16,7 @@ from config import (
 from utils import generate_new_API_key
 
 from FamService.youtube import YoutubePoller
+from FamService.fetch import VideosFetcher
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -24,6 +25,8 @@ app.config["CORS_HEADERS"] = "Content-Type"
 poller = YoutubePoller(YOUTUBE_SERVICE_NAME, YOUTUBE_API_VERSION)
 # initial pageToken
 page_token = None
+
+fetcher = VideosFetcher()
 
 
 @app.before_first_request
@@ -52,6 +55,16 @@ def root():
     message = "New key: {}".format(generate_new_API_key())
     print(message, flush=True)
     return jsonify({"message": message})
+
+
+@app.route("/fetch", methods=["GET"])
+@cross_origin()
+def search():
+    query = request.args.get('query')
+    page = int(request.args.get('page'))
+    print("[FamServer]:", query, page, flush=True)
+    response = fetcher.fetch_videos(query, page)
+    return jsonify(response)
 
 
 def start_runner():
