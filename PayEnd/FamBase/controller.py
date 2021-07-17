@@ -1,7 +1,7 @@
 from pymongo import DESCENDING, errors
 
 from config import PAGINATION_LIMIT
-from database import fam_collection
+from FamBase.database import fam_collection
 
 
 def add_video(video_fam):
@@ -23,9 +23,15 @@ def add_videos(videos):
 
 
 def search_videos(query, skip_count):
+    if query:
+        search = {"$text": {"$search": query}}
+    else:
+        # handle empty query
+        search = {}
+
     return (
-        fam_collection.find({"$text": {"$search": query}})
+        fam_collection.find(search)
         .sort("published_at", DESCENDING)
-        .skip(skip_count)
+        .skip(skip_count * PAGINATION_LIMIT)
         .limit(PAGINATION_LIMIT)
     )
