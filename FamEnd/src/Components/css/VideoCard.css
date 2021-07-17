@@ -1,0 +1,23 @@
+.video-holder {
+    color: aliceblue;
+    margin: 20px 20px 0 0;
+    border: 5px solid #333;
+    overflow: auto;
+}
+.video-thumb {
+    float: left;
+}
+.video-thumb img {
+    display: block;
+}
+.video-content {
+    padding-left: 10%;
+    padding-right: 5px;
+}
+.video-title {
+    margin-top: 10%;
+    padding-left: 10%;
+    padding-right: 5px;
+    font-weight: bold;
+    font-size: 200%;
+}
