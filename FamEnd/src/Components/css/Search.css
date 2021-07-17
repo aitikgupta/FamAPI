@@ -1,0 +1,18 @@
+.searchHolder {
+  margin-top: 30px;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  display: flex;
+  gap: 1vw;
+}
+
+.inputHolder {
+  width: 100%;
+  background-color: #fffffe;
+  padding: 0.5vw;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: large;
+  color: #0f0e17;
+}
